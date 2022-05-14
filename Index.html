@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+                <h1>Formulario Datos</h1>
+                <section class="input">
+                    <p>filtrar Por:</p>
+                    <select name="Filtrarx" id="filtrarX">
+                        <option value="Todos">Todos</option>
+                        <option value="Aereo">Aereo</option> 
+                        <option value="Terrestre">Terrestre</option> 
+                    </select>
+                </section>
+                <section id="promedios"> 
+                    <p> Promedio Velocidad Maxima </p>
+                    <input type="text" readonly>
+                    <button id="calcularPromedio">Calcular</button>
+                </section>
+                <section class="option">
+                    <div>
+                        <p>ID</p>
+                        <input type="checkbox" name="Ids" id="ckId" checked>
+                    </div>
+                    <div>
+                        <p>Modelo</p>
+                        <input type="checkbox" name="modelos" id="ckModelos" checked>
+                    </div>
+                    <div>
+                        <p>Año de Fabricacion</p>
+                        <input type="checkbox" name="anioFabricacion" id="ckAnioF" checked>
+                    </div>
+                    <div>
+                        <p>Velocidad Maxima</p>
+                        <input type="checkbox" name="velMax" id="ckVelMax" checked>
+                    </div>
+                    <div>
+                        <P>alturaMaxima</P>
+                        <input type="checkbox" name="altMax" id="ckAltMax" checked>
+                    </div>
+                    <div>
+                        <p>Autonomia</p>
+                        <input type="checkbox" name="autonomia" id="ckAutonomia" checked>
+                    </div>
+                    <div>
+                        <p>Cant. Puertas</p>
+                        <input type="checkbox" name="cantPue" id="ckCantPue" checked>
+                    </div>
+                    <div>
+                        <p>Cant. Ruedas</p>
+                        <input type="checkbox" name="cantRue" id="ckCantRue" checked>
+                    </div>
+                    
+                </section>
+                <table id="miTabla">
+                    <thead>
+                        <th class="id"> ID </th>
+                        <th class="modelo"> MODELO </th>
+                        <th class="anioFabricacion"> AÑO Fab. </th>
+                        <th class="velMax"> Vel. Max </th>
+                        <th class="altMax"> Alt. Max </th>
+                        <th class="autonomia"> Autonomia </th>
+                        <th class="cantPue"> Cant Puertas </th>
+                        <th class="cantRue"> Cant Ruedas </th>
+                    </thead>
+                </table>
+                <button  id="agregar">AGREGAR</button>
+                <section id="desplegable" class="invisible">
+                    <form action="" name="fAgregar" id="fAgregar" >
+                        <p>ID:</p>
+                        <input type="text" disabled name="id">
+                        <p>Modelo</p>
+                        <input type="text" name="modelo">
+                        <p>Año Fabricacion</p>
+                        <input type="text" name="anioFabricacion">
+                        <p>Velocidad Maxima</p>
+                        <input type="text" name="velMax">
+                        <p> Tipo</p>
+                        <select name="tipo" id="tipox" >
+                            <option value="Aereo">Aereo</option> 
+                            <option value="Terrestre">Terrestre</option> 
+                        </select>
+    
+                        
+                    </form>
+                    <section>
+                        <button id="alta" > Agregar </button>
+                        <button> Modificar </button>
+                        <button> Eliminar </button>
+                    </section>
+                    
+                </section> 
+    </main>
+
+
+
+
+    <script>
+
+    class Vehiculo{
+        _id;
+        _modelo;
+        _anioFabricacion;
+        _velocidadMaxima;
+        constructor(id, modelo, anioFabricacion, velocidadMaxima){
+            this._id=id;
+            this._modelo=modelo;
+            this._anioFabricacion=anioFabricacion;
+            this._velocidadMaxima=velocidadMaxima;
+        }
+        toString(){
+            return '<td class="id">'+this._id+'</td><td class="modelo">'+this._modelo+'</td><td class="anioFabricacion">'+this._anioFabricacion+'</td><td class="velMax">'+this._velocidadMaxima+'</td>';
+        }
+    }
+    class Aereo extends Vehiculo{
+        _alturaMaxima;
+        _autonomia;
+        constructor(id, modelo, anioFabricacion, velocidadMaxima , alturaMaxima, autonomia){
+            super(id,modelo,anioFabricacion,velocidadMaxima);
+            this._alturaMaxima=alturaMaxima;
+            this._autonomia=autonomia;
+        }
+        toString(){
+            return ''+super.toString()+'<td class="altMax">'+this._alturaMaxima+'</td><td class="autonomia">'+this._autonomia+'</td><td class="cantPue">N/A</td><td class="cantRue">N/A</td>';
+        }
+    }
+    class Terrestre extends Vehiculo{
+        _cantidadPuertas;
+        _cantidadRuedas;
+        constructor(id,modelo, anioFabricacion,velocidadMaxima , cantidadPuertas, cantidadRuedas){
+            super(id,modelo,anioFabricacion,velocidadMaxima);
+            this._cantidadPuertas=cantidadPuertas;
+            this._cantidadRuedas=cantidadRuedas;
+        }
+        toString(){
+            return ''+super.toString()+'<td class="altMax">N/A</td><td class="autonomia">N/A</td><td class="cantPue">'+this._cantidadPuertas+'</td><td class=" cantRue">'+this._cantidadRuedas+'</td>';
+        }
+    }
+    const datos=JSON.parse('[{"id":14, "modelo":"Ferrari F100", "anoFab":1998, "velMax":400, "cantPue":2,"cantRue":4},{"id":51, "modelo":"Dodge Viper", "anoFab":1991, "velMax":266,"cantPue":2, "cantRue":4},{"id":67, "modelo":"Boeing CH-47 Chinook","anoFab":1962, "velMax":302, "altMax":6, "autonomia":1200},{"id":666,"modelo":"Aprilia RSV 1000 R", "anoFab":2004, "velMax":280, "cantPue":1,"cantRue":2},{"id":872, "modelo":"Boeing 747-400", "anoFab":1989, "velMax":988,"altMax":13, "autonomia":13450},{"id":742, "modelo":"Cessna CH-1 SkyhookR","anoFab":1953, "velMax":174, "altMax":3, "autonomia":870}]');
+    console.log(datos);
+
+    let datosCargados=new Array();
+    for(let i=0;i<datos.length;i++){
+        if(datos[i].cantPue!= undefined && datos[i].cantRue!=undefined){
+            let nuevo=new Terrestre(datos[i].id, datos[i].modelo,datos[i].anoFab,datos[i].velMax, datos[i].cantPue, datos[i].cantRue);
+            datosCargados.push(nuevo);
+        }
+        else{
+            let nuevo=new Aereo(datos[i].id, datos[i].modelo,datos[i].anoFab,datos[i].velMax,datos[i].altMax, datos[i].autonomia);
+            datosCargados.push(nuevo);
+        }
+    }
+    console.log(datosCargados);
+
+const tabla=document.getElementById('miTabla');
+function CargarAereo(){
+    for(let i=0;i<datosCargados.length;i++){
+        if(datosCargados[i] instanceof Aereo ){
+            tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+        }
+    }
+};
+function CargarTerrestre(){
+    for(let i=0;i<datosCargados.length;i++){
+        if(datosCargados[i] instanceof Terrestre ){
+            tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+        }
+    }
+};
+function CargarTodo(){
+    for(let i=0;i<datosCargados.length;i++){
+        tabla.insertRow(-1).innerHTML = datosCargados[i].toString();
+    }
+};
+function limpiarTabla(){
+    var table = document.getElementById("miTabla");
+    var rowCount = table.rows.length;
+    for(let i=rowCount;i>1;i--){
+        table.deleteRow(i -1);
+    }
+    
+}
+
+CargarTodo();
+
+function CargarSegunSeleccionActual(){
+   if(filtro.options[filtro.selectedIndex].value=='Aereo'){
+        limpiarTabla();
+        CargarAereo();
+   }
+   else if(filtro.options[filtro.selectedIndex].value=='Terrestre'){
+        limpiarTabla();
+        CargarTerrestre();
+   }
+   else{
+       limpiarTabla();
+       CargarTodo();
+   }
+}
+const filtro=document.getElementById('filtrarX');
+filtro.addEventListener('change',CargarSegunSeleccionActual);
+function ordenarx(nroParametro){
+    switch(nroParametro){
+        case 1:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._id>b._id){
+            r=1
+        }
+        else if (a._id<b._id){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 2:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._apellido>b._apellido){
+            r=1
+        }
+        else if (a._apellido<b._apellido){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 3:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._nombre>b._nombre){
+            r=1
+        }
+        else if (a._nombre<b._nombre){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 4:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._dni>b._dni){
+            r=1
+        }
+        else if (a._dni<b._dni){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 5:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._cursoNumero>b._cursoNumero){
+            r=1
+        }
+        else if (a._cursoNumero<b._cursoNumero){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 6: 
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._cursoLetra>b._cursoLetra){
+            r=1
+        }
+        else if (a._cursoLetra<b._cursoLetra){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 7:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._materia>b._materia){
+            r=1
+        }
+        else if (a._materia<b._materia){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+        case 8:
+        datosCargados.sort((a,b)=>{
+        let r=0;
+        if(a._anio>b._anio){
+            r=1
+        }
+        else if (a._anio<b._anio){
+            r=-1;
+        }
+        return r;
+         });
+            break;
+            
+    }
+    
+}
+
+
+document.getElementById('calcularPromedio').addEventListener('click',(e)=>{
+    e.preventDefault();
+    const test =document.querySelector('section#promedios input');
+    console.log(test);
+    let resultado;
+    let unidades=0;
+    if(filtro.options[filtro.selectedIndex].value=='Aereo'){
+        resultado=datosCargados.reduce((buffer,elemento)=>{
+            let aux=0;
+            if(elemento instanceof Aereo ){
+                aux=elemento._velocidadMaxima;
+            }
+            return buffer+aux;
+        },0);
+        unidades=datosCargados.reduce((buffer,elemento)=>{
+            let aux=0;
+            if(elemento instanceof Aereo ){
+                 aux=1;
+            }
+            return buffer+aux;
+        },0);
+   }
+   else if(filtro.options[filtro.selectedIndex].value=='Terrestre'){
+    resultado=datosCargados.reduce((buffer,elemento)=>{
+        let aux=0;
+        if(elemento instanceof Terrestre ){
+                aux= elemento._velocidadMaxima;
+        }
+        return buffer+aux;
+    },0);
+    unidades=datosCargados.reduce((buffer,elemento)=>{
+        let aux=0;
+            if(elemento instanceof Terrestre ){
+                aux=1;
+            }
+            return buffer+aux;
+    },0);
+    
+   }
+   else{
+    resultado=datosCargados.reduce((buffer,elemento)=> buffer+elemento._velocidadMaxima,0);
+    unidades=datosCargados.length;
+   }
+  
+    test.value=resultado/unidades;
+});
+function OcultarColumna(SelectorDeCheckbox, ClaseAControlar){
+    document.querySelector(SelectorDeCheckbox).addEventListener('change',()=>{
+    let estoySelecionado=document.querySelector(SelectorDeCheckbox).checked;
+    
+    const todos=document.querySelectorAll(ClaseAControlar);
+    console.log(todos);
+    if(!estoySelecionado){
+        
+        for(let i=0;i<todos.length;i++){
+            todos[i].className+=' invisible';
+        }
+    }
+    else{
+        for(let i=0;i<todos.length;i++){
+            todos[i].classList.remove('invisible');
+        }
+    }
+    });
+}
+OcultarColumna('#ckId','.id');
+OcultarColumna('#ckModelos','.modelo');
+OcultarColumna('#ckAnioF','.anioFabricacion');
+OcultarColumna('#ckVelMax',".velMax");
+OcultarColumna('#ckAltMax','.altMax');
+OcultarColumna('#ckAutonomia','.autonomia');
+OcultarColumna('#ckCantPue','.cantPue');
+OcultarColumna('#ckCantRue','.cantRue');
+
+function despliegue(e){
+    e.preventDefault();
+    const boton=document.querySelector('button#agregar');
+    
+    const desplegable=document.querySelector("section#desplegable");
+    console.log(boton);
+    if(boton.innerHTML=="AGREGAR"){
+        desplegable.style.display="flex";
+        boton.innerHTML="Cancelar";
+    }
+    else{
+        boton.innerHTML="AGREGAR";
+        desplegable.style.display="none";
+        
+    }
+}
+
+document.querySelector('button#agregar').addEventListener('click',despliegue);
+
+function CargarFormularioSegunTypoUsuario(){
+    const myform=document.forms['fAgregar'];
+    var input = document.createElement("input");
+    var input2=document.createElement("input");
+    input.id="myInputD1";
+    input2.id="myInputD2";
+
+    let i1=document.getElementById("myInputD1");
+    let i2=document.getElementById("myInputD2");
+
+    if(i1!=undefined && i2!=undefined){
+        myform.removeChild(i1);
+        myform.removeChild(i2);
+    }
+    let filtro=document.querySelector('form select#tipox');
+    if(filtro.options[filtro.selectedIndex].value == "Aereo"){
+        input.name="altMax";
+        input.placeholder="Altura Maxima";
+        
+        input2.name= "autonomia";
+        input2.placeholder="Autonomia";
+    }
+    else{
+        input.name="cantPuertas";
+        input.placeholder="Cant. Puertas";
+      
+        input2.name= "cantRuedas";
+        input2.placeholder="Cant. Ruedas";
+    }
+    myform.appendChild(input);
+    myform.appendChild(input2);
+}
+CargarFormularioSegunTypoUsuario();
+document.querySelector('form select#tipox').addEventListener('change',CargarFormularioSegunTypoUsuario);
+function AltaVehiculo(){
+    const myform=document.forms['fAgregar'];
+    var nuevo;
+    if(window.sessionStorage.getItem('unId')==undefined){
+        window.sessionStorage.setItem('unId',1000);
+    }
+    let idRecuperado=window.sessionStorage.getItem('unId');
+    idRecuperado++;
+    if(myform.tipo.options[myform.tipo.selectedIndex].value=="Aereo"){
+        nuevo= new Aereo(idRecuperado,myform.modelo.value,myform.anioFabricacion.value,myform.velMax.value,myform.altMax.value, myform.autonomia.value);
+        
+    }
+    else{
+        nuevo= new Terrestre(idRecuperado,myform.modelo.value,myform.anioFabricacion.value,myform.velMax.value,myform.cantPuertas.value, myform.cantRuedas.value);
+    }
+    window.sessionStorage.setItem('unId',idRecuperado);
+    datosCargados.push(nuevo); 
+}
+document.getElementById('alta').addEventListener('click',(e)=>{
+    e.preventDefault();
+    let error=false;
+
+    const myform=document.forms['fAgregar'];
+    if(myform.modelo.value=="") {
+            error=true;
+            myform.modelo.style.borderColor= 'red';
+    }else {
+        myform.modelo.style.borderColor= 'inherit';
+    }
+    if(myform.anioFabricacion.value=="") {
+            error=true;
+            myform.anioFabricacion.style.borderColor= 'red';
+    }else {
+        myform.anioFabricacion.style.borderColor= 'inherit';
+    }
+    if(myform.velMax.value=="") {
+            error=true;
+            myform.velMax.style.borderColor= 'red';
+    }else {
+        myform.velMax.style.borderColor= 'inherit';
+    }
+    if(myform.tipo.options[myform.tipo.selectedIndex].value=="Aereo"){
+        if(myform.altMax.value=="") {
+            error=true;
+            myform.altMax.style.borderColor= 'red';
+        }else {
+            myform.altMax.style.borderColor= 'inherit';
+        }
+        if(myform.autonomia.value=="") {
+            error=true;
+            myform.autonomia.style.borderColor= 'red';
+        }else {
+            myform.autonomia.style.borderColor= 'inherit';
+        }
+    }
+    else{
+        if(myform.cantPuertas.value=="") {
+            error=true;
+            myform.cantPuertas.style.borderColor= 'red';
+        }else {
+            myform.cantPuertas.style.borderColor= 'inherit';
+        }
+        if(myform.cantRuedas.value=="") {
+            error=true;
+            myform.cantRuedas.style.borderColor= 'red';
+        }else {
+            myform.cantRuedas.style.borderColor= 'inherit';
+        }
+    }
+    
+    if(!error){
+        AltaVehiculo();
+        CargarSegunSeleccionActual();
+        limpiarFormulario();
+    }
+});
+function limpiarFormulario(){
+    const myform=document.forms['fAgregar'];
+    myform.modelo.value="";
+    myform.anioFabricacion.value="";
+    myform.velMax.value="";
+    
+    if(myform.tipo.options[myform.tipo.selectedIndex].value=="Aereo"){
+        myform.altMax.value='';
+        myform.autonomia.value="";
+    }
+    else{
+        myform.cantPuertas.value="";
+        myform.cantRuedas.value="";
+    }
+}
+function mostrarFilaSeleccionada(){
+    var table = document.getElementById("miTabla");
+    console.log(table.rows[1].cells[6].innerHTML);
+    console.log(table.rows.length);
+    for(let i=1;i<table.rows.length;i++){
+        table.rows[i].addEventListener('click',(e)=>{
+            const boton=document.querySelector('button#agregar');
+    
+            const desplegable=document.querySelector("section#desplegable");
+            console.log(boton);
+            if(boton.innerHTML=="AGREGAR"){
+                desplegable.style.display="flex";
+                boton.innerHTML="Cancelar";
+            }
+            const myform=document.forms['fAgregar'];
+            myform.id.value=table.rows[i].cells[0].innerHTML;
+            myform.modelo.value=table.rows[i].cells[1].innerHTML;
+            myform.anioFabricacion.value=table.rows[i].cells[2].innerHTML;
+            myform.velMax.value=table.rows[i].cells[3].innerHTML;
+            if(table.rows[i].cells[4].innerHTML=="N/A"){
+                myform.tipo.selectedIndex=1;
+            }
+            else{
+                myform.tipo.selectedIndex=0;
+            }
+            CargarFormularioSegunTypoUsuario();
+            if(myform.tipo.options[myform.tipo.selectedIndex].value=="Aereo"){
+                myform.altMax.value=table.rows[i].cells[4].innerHTML;
+                myform.autonomia.value=table.rows[i].cells[5].innerHTML;
+            }
+            else if(myform.tipo.options[myform.tipo.selectedIndex].value=="Terrestre"){
+                myform.cantPuertas.value= table.rows[i].cells[6].innerHTML;
+                myform.cantRuedas.value= table.rows[i].cells[7].innerHTML;
+            }
+            
+        })
+    }
+}
+mostrarFilaSeleccionada();
+
+    </script>
+    <style>
+        main{
+            margin: auto;
+            width: 90%;
+            background: grey;
+            text-align: center;
+        }
+        section{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 2%;
+            width: 100%;
+
+        }
+        section.option{
+            margin: 3%;
+        }
+        section.option div{
+            border: 1px solid white;
+        }
+        table{
+            width: 100%;
+        }
+        th{
+            border: 1px solid white;
+        }
+        td{
+            border: 1px solid white;
+        }
+        section#desplegable{
+            flex-direction: column;
+            width: 90%;
+            margin: 5%;
+        }
+        section#desplegable form{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            margin: auto;
+        }
+        section#desplegable form input{
+            margin-top: 2%;
+            margin-bottom: 2%;
+        
+        }
+        section#desplegable section{
+            flex-direction: row;
+        }
+        section#desplegable button{
+            width: 20%;
+            margin: 2%;
+        }
+        
+        .invisible{
+            display: none;    
+        }
+    </style>
+    </body>
+</html>
